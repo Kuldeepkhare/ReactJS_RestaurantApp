@@ -1,21 +1,17 @@
 import React, {Component} from 'react';
 import MainComponent from "./components/MainComponent";
+import './App.css';
+import {BrowserRouter} from 'react-router-dom';
 
 class App extends Component {
 
-    componentDidMount() {
-        console.log('data is in App---- componentDidMount');
-    }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('data is in App---- componentDidUpdate');
-    }
-
     render() {
-        console.log('data is in App------- render');
         return (
-            <div>
-                <MainComponent/>
-            </div>
+            <BrowserRouter>
+                <div className="App">
+                    <MainComponent/>
+                </div>
+            </BrowserRouter>
         );
     }
 }

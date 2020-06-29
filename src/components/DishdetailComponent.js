@@ -1,7 +1,7 @@
 import React from "react";
-import {Card, CardBody, CardImg, CardText, CardTitle} from "reactstrap";
+import {Card, CardBody, CardImg, CardText, CardTitle, Breadcrumb, BreadcrumbItem} from "reactstrap";
 import * as moment from 'moment';
-
+import {Link} from 'react-router-dom';
 
 /**
  * This method renders the comment section
@@ -43,15 +43,13 @@ function RenderComments({comments}) {
  */
 function RenderDish({dish}) {
     return (
-        <div className="col-12 col-md-5 m-1">
-            <Card>
-                <CardImg top src={dish.image} alt={dish.name}/>
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
-        </div>
+        <Card>
+            <CardImg top src={dish.image} alt={dish.name}/>
+            <CardBody>
+                <CardTitle>{dish.name}</CardTitle>
+                <CardText>{dish.description}</CardText>
+            </CardBody>
+        </Card>
     )
 }
 
@@ -65,10 +63,22 @@ function DishDetail(props) {
         return (
             <div className="container">
                 <div className="row">
-                    <RenderDish dish={dish}></RenderDish>
+                    <Breadcrumb>
+                        <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{dish.name}</h3>
+                        <hr/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderDish dish={dish}></RenderDish>
+                    </div>
                     <div className="col-12 col-md-5 m-1">
                         <h4>Comments</h4>
-                        <RenderComments comments={dish.comments}></RenderComments>
+                        <RenderComments comments={props.comments}></RenderComments>
                     </div>
                 </div>
             </div>
