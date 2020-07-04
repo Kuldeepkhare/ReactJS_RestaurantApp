@@ -1,21 +1,107 @@
 import React, {Component} from "react";
-import {Navbar, NavbarBrand, Jumbotron, NavbarToggler, NavItem, Nav,Collapse} from "reactstrap";
+import {
+    Navbar,
+    NavbarBrand,
+    Jumbotron,
+    NavbarToggler,
+    NavItem,
+    Nav,
+    Collapse,
+    Modal,
+    ModalHeader,
+    ModalBody, Button, Form, FormGroup, Label, Input, FormFeedback
+} from "reactstrap";
 import {NavLink} from 'react-router-dom';
+
 class HeaderComponent extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isNavOpen: false
+            isNavOpen: false,
+            isModalOpen: false,
+            errorData: {
+                username: '',
+                password: ''
+            }
         }
         this.toggleNav = this.toggleNav.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+        this.validateLoginFieldInput = this.validateLoginFieldInput.bind(this);
+        this.setStateOfError = this.setStateOfError.bind(this);
     }
 
+    /**
+     * This method toggles nav bar in mobile view
+     */
     toggleNav() {
         this.setState({
             isNavOpen: !this.state.isNavOpen
         })
     }
+
+    /**
+     * This method toggles the modal and resets the error values
+     */
+    toggleModal() {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+        this.setStateOfError('username', '');
+        this.setStateOfError('password', '');
+    }
+
+    /**
+     * This method is called when user clicks on the submit button of login form
+     * @param event
+     */
+    handleLogin(event) {
+        const errorExist = this.validateLoginFieldInput(this.username.value, this.password.value);
+        if (!errorExist) {
+            this.toggleModal();
+            alert("Username: " + this.username.value + " Password: " +
+                this.password.value + " Remember: " + this.remember.checked);
+        }
+        event.preventDefault();
+    }
+
+    /**
+     * This method helps to set the error state of fields with the error received in parameter
+     * @param field
+     * @param value
+     */
+    setStateOfError(field, value) {
+        this.setState(prevState => {
+            let errorData = Object.assign({}, prevState.errorData);
+            errorData[field] = value;
+            return {errorData};
+        });
+    }
+
+    /**
+     * This method validates the input field values and sets the error accordingly
+     * @param username
+     * @param password
+     * @returns {boolean}
+     */
+    validateLoginFieldInput(username, password) {
+        let errorExist = false;
+        if (username.length < 2) {
+            this.setStateOfError('username', 'Username should have at least 2 character length.');
+            errorExist = true;
+        }
+        if (password.length < 5) {
+            this.setStateOfError('password', 'Password should have at least 5 character length.');
+            errorExist = true;
+        }
+        return errorExist;
+    }
+
+    /**
+     * This method renders the header and modal component with login form
+     * @returns {*}
+     */
     render() {
         return (
             <React.Fragment>
@@ -28,20 +114,31 @@ class HeaderComponent extends Component {
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
-                                    <NavLink className="nav-link"  to='/home'><span className="fa fa-home fa-lg"></span> Home</NavLink>
+                                    <NavLink className="nav-link" to='/home'>
+                                        <span className="fa fa-home fa-lg"/> Home</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to='/aboutus'><span className="fa fa-info fa-lg"></span> About Us</NavLink>
+                                    <NavLink className="nav-link" to='/aboutus'>
+                                        <span className="fa fa-info fa-lg"/> About Us</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link"  to='/menu'><span className="fa fa-list fa-lg"></span> Menu</NavLink>
+                                    <NavLink className="nav-link" to='/menu'>
+                                        <span className="fa fa-list fa-lg"/> Menu</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to='/contactus'><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
+                                    <NavLink className="nav-link" to='/contactus'>
+                                        <span className="fa fa-address-card fa-lg"/> Contact Us</NavLink>
                                 </NavItem>
                             </Nav>
                         </Collapse>
                     </div>
+                    <Nav className="ml-auto" navbar>
+                        <NavItem>
+                            <Button outline onClick={this.toggleModal}>
+                                <span className="fa fa-sign-in fa-lg"/>Login
+                            </Button>
+                        </NavItem>
+                    </Nav>
                 </Navbar>
                 <Jumbotron>
                     <div className="container">
@@ -54,6 +151,38 @@ class HeaderComponent extends Component {
                         </div>
                     </div>
                 </Jumbotron>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+                    <ModalBody>
+                        <Form onSubmit={this.handleLogin}>
+                            <FormGroup>
+                                <Label htmlFor="username">Username</Label>
+                                <Input type="text" id="username" name="username"
+                                       innerRef={(input) => this.username = input}
+                                       valid={this.state.errorData.username === ''}
+                                       invalid={this.state.errorData.username !== ''}/>
+                                <FormFeedback>{this.state.errorData.username}</FormFeedback>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label htmlFor="password">Password</Label>
+                                <Input type="password" id="password" name="password"
+                                       innerRef={(input) => this.password = input}
+                                       valid={this.state.errorData.password === ''}
+                                       invalid={this.state.errorData.password !== ''}/>
+                                <FormFeedback>{this.state.errorData.password}</FormFeedback>
+                            </FormGroup>
+                            <FormGroup check>
+                                <Label check>
+                                    <Input type="checkbox" name="remember"
+                                           innerRef={(input) => this.remember = input}/>
+                                    Remember me
+                                </Label>
+                            </FormGroup>
+                            <Button type="submit" value="submit" color="primary"
+                                    className="ml-lg-5 col-md-9">Login</Button>
+                        </Form>
+                    </ModalBody>
+                </Modal>
             </React.Fragment>
         );
     }
