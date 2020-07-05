@@ -9,6 +9,11 @@ import ContactComponent from "./ContactComponent";
 import AboutComponent from './AboutComponent';
 import {connect} from "react-redux";
 
+/**
+ * This method maps the incoming state items to props of this component
+ * @param state
+ * @returns {{promotions: [{image: string, featured: boolean, price: string, name: string, description: string, id: number, label: string}], comments: *, dishes: [{image: string, featured: boolean, price: string, name: string, description: string, id: number, label: string, category: string}, {image: string, featured: boolean, price: string, name: string, description: string, id: number, label: string, category: string}, {image: string, featured: boolean, price: string, name: string, description: string, id: number, label: string, category: string}, {image: string, featured: boolean, price: string, name: string, description: string, id: number, label: string, category: string}], leaders: [{image: string, featured: boolean, name: string, description: string, id: number, designation: string, abbr: string}, {image: string, featured: boolean, name: string, description: string, id: number, designation: string, abbr: string}, {image: string, featured: boolean, name: string, description: string, id: number, designation: string, abbr: string}, {image: string, featured: boolean, name: string, description: string, id: number, designation: string, abbr: string}]}}
+ */
 const mapStateToProps = (state) => {
     return {
         dishes: state.dishes,
@@ -23,12 +28,12 @@ class MainComponent extends Component {
         super(props);
     }
 
+    /**
+     * This method renders the Home component
+     * @returns {*}
+     * @constructor
+     */
     render() {
-        /**
-         * This method renders the Home component
-         * @returns {*}
-         * @constructor
-         */
         const HomePage = () => {
             return (
                 <HomeComponent
@@ -69,4 +74,5 @@ class MainComponent extends Component {
     }
 }
 
+// connecting the MainComponent with store, passing the mapStateToProps
 export default withRouter(connect(mapStateToProps)(MainComponent));
