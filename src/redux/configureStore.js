@@ -1,5 +1,8 @@
-import {createStore} from 'redux';
-import {initialState, Reducer} from './reducer';
+import {combineReducers, createStore} from 'redux';
+import {DishesReducer} from "./dishesReducer";
+import {CommentsReducer} from "./commentsReducer";
+import {LeadersReducer} from "./leadersReducer";
+import {PromotionsReducer} from "./promotionsReducer";
 
 /**
  * This exportable method creates a redux store with two required params(reducer fn, previous state)
@@ -8,7 +11,11 @@ import {initialState, Reducer} from './reducer';
  */
 export const ConfigureStore = () => {
     return createStore(
-        Reducer, // reducer
-        initialState, // our initialState
+        combineReducers({
+            dishes: DishesReducer,
+            comments: CommentsReducer,
+            leaders: LeadersReducer,
+            promotions: PromotionsReducer
+        })
     );
 }

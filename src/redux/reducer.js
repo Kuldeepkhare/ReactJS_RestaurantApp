@@ -1,7 +1,7 @@
-import {DISHES} from '../shared/dishes';
-import {PROMOTIONS} from "../shared/promotions";
-import {COMMENTS} from "../shared/comments";
-import {LEADERS} from "../shared/leaders";
+
+
+
+
 
 /**
  * Initial state

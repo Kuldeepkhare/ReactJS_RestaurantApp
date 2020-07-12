@@ -126,28 +126,34 @@ class CommentFormComponent extends Component {
 function RenderComments({comments}) {
     if (comments != null)
         return (
-            <ul className="list-unstyled">
-                {comments.map((commentDetails) => {
-                    if (commentDetails != null)
-                        return (
-                            <div key={commentDetails.id}>
-                                <li>
-                                    <p>{commentDetails.comment}</p>
-                                    {/*Displaying author name with date in format*/}
-                                    <p>-- {commentDetails.author} , {moment(commentDetails.date).format('MMM DD, YYYY')}</p>
-                                </li>
-                            </div>
-                        );
-                    else
-                        return (
-                            <div></div>
-                        );
-                })};
-            </ul>
+            <div className="col-12 col-md-5 m-1">
+                <h4>Comments</h4>
+                <ul className="list-unstyled">
+                    {comments.map((commentDetails) => {
+                        if (commentDetails != null)
+                            return (
+                                <div key={commentDetails.id}>
+                                    <li>
+                                        <p>{commentDetails.comment}</p>
+                                        {/*Displaying author name with date in format*/}
+                                        <p>-- {commentDetails.author} , {moment(commentDetails.date).format('MMM DD, YYYY')}</p>
+                                    </li>
+                                </div>
+                            );
+                        else
+                            return (
+                                <div></div>
+                            );
+                    })};
+                </ul>
+                <CommentFormComponent/>
+            </div>
         );
     else
         return (
-            <div></div>
+            <div>
+                <CommentFormComponent/>
+            </div>
         );
 }
 
@@ -191,11 +197,7 @@ function DishDetail(props) {
                     <div className="col-12 col-md-5 m-1">
                         <RenderDish dish={dish}></RenderDish>
                     </div>
-                    <div className="col-12 col-md-5 m-1">
-                        <h4>Comments</h4>
-                        <RenderComments comments={props.comments}></RenderComments>
-                        <CommentFormComponent></CommentFormComponent>
-                    </div>
+                    <RenderComments comments={props.comments}></RenderComments>
                 </div>
             </div>
         );
