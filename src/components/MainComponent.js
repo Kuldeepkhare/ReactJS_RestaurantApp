@@ -8,6 +8,7 @@ import HomeComponent from "./HomeComponent";
 import ContactComponent from "./ContactComponent";
 import AboutComponent from './AboutComponent';
 import {connect} from "react-redux";
+import {addComment} from "../redux/actionCreators";
 
 /**
  * This method maps the incoming state items to props of this component
@@ -22,6 +23,10 @@ const mapStateToProps = (state) => {
         leaders: state.leaders
     };
 }
+
+const mapDispatchToProps = dispatch => ({
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+});
 
 class MainComponent extends Component {
     constructor(props) {
@@ -54,6 +59,7 @@ class MainComponent extends Component {
                 <DishDetail
                     dish={this.props.dishes.find(dish => dish.id === parseInt(match.params.dishId, 10))}
                     comments={this.props.comments.filter(comment => comment.dishId === parseInt(match.params.dishId, 10))}
+                    addComment={this.props.addComment}
                 />
             )
         }
@@ -75,4 +81,4 @@ class MainComponent extends Component {
 }
 
 // connecting the MainComponent with store, passing the mapStateToProps
-export default withRouter(connect(mapStateToProps)(MainComponent));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MainComponent));
