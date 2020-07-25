@@ -14,6 +14,7 @@ import {
 import * as moment from 'moment';
 import {Link} from 'react-router-dom';
 import {Control, Errors, LocalForm} from "react-redux-form";
+import {LoadingComponent} from './LoadingComponent';
 
 /**
  * All the required form validation method definition
@@ -181,7 +182,23 @@ function RenderDish({dish}) {
  */
 function DishDetail(props) {
     let dish = props.dish;
-    if (dish != null)
+    if (props.isLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <LoadingComponent/>
+                </div>
+            </div>
+        );
+    } else if (props.errorMessage) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+        );
+    } else if (dish != null)
         return (
             <div className="container">
                 <div className="row">

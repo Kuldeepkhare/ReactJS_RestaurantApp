@@ -8,7 +8,7 @@ import HomeComponent from "./HomeComponent";
 import ContactComponent from "./ContactComponent";
 import AboutComponent from './AboutComponent';
 import {connect} from "react-redux";
-import {addComment} from "../redux/actionCreators";
+import {addComment, fetchDishes} from "../redux/actionCreators";
 
 /**
  * This method maps the incoming state items to props of this component
@@ -25,12 +25,19 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+    fetchDishes: () => {
+        dispatch(fetchDishes())
+    }
 });
 
 class MainComponent extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        this.props.fetchDishes();
     }
 
     /**
@@ -42,7 +49,9 @@ class MainComponent extends Component {
         const HomePage = () => {
             return (
                 <HomeComponent
-                    dish={this.props.dishes.find(dish => dish.featured)}
+                    dish={this.props.dishes.dishes.find(dish => dish.featured)}
+                    dishLoading={this.props.dishes.isLoading}
+                    dishError={this.props.dishes.errorMessage}
                     promotion={this.props.promotions.find(promo => promo.featured)}
                     leader={this.props.leaders.find(leader => leader.featured)}
                 />
@@ -57,7 +66,9 @@ class MainComponent extends Component {
         const DishWithId = ({match}) => {
             return (
                 <DishDetail
-                    dish={this.props.dishes.find(dish => dish.id === parseInt(match.params.dishId, 10))}
+                    dish={this.props.dishes.dishes.find(dish => dish.id === parseInt(match.params.dishId, 10))}
+                    isLoading={this.props.dishes.isLoading}
+                    errorMessage={this.props.dishes.errorMessage}
                     comments={this.props.comments.filter(comment => comment.dishId === parseInt(match.params.dishId, 10))}
                     addComment={this.props.addComment}
                 />

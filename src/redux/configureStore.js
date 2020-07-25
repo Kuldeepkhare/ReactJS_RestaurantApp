@@ -1,8 +1,10 @@
-import {combineReducers, createStore} from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {DishesReducer} from "./dishesReducer";
 import {CommentsReducer} from "./commentsReducer";
 import {LeadersReducer} from "./leadersReducer";
 import {PromotionsReducer} from "./promotionsReducer";
+import thunk from "redux-thunk";
+import logger from "redux-logger/src";
 
 /**
  * This exportable method creates a redux store with two required params(reducer fn, previous state)
@@ -16,6 +18,7 @@ export const ConfigureStore = () => {
             comments: CommentsReducer,
             leaders: LeadersReducer,
             promotions: PromotionsReducer
-        })
+        }),
+        applyMiddleware(thunk, logger)
     );
 }
