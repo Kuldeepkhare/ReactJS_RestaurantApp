@@ -5,6 +5,8 @@ import {LeadersReducer} from "./leadersReducer";
 import {PromotionsReducer} from "./promotionsReducer";
 import thunk from "redux-thunk";
 import logger from "redux-logger/src";
+import {createForms} from "react-redux-form";
+import {InitialFeedback} from "./forms";
 
 /**
  * This exportable method creates a redux store with two required params(reducer fn, previous state)
@@ -17,7 +19,10 @@ export const ConfigureStore = () => {
             dishes: DishesReducer,
             comments: CommentsReducer,
             leaders: LeadersReducer,
-            promotions: PromotionsReducer
+            promotions: PromotionsReducer,
+            ...createForms({
+                feedback: InitialFeedback
+            })
         }),
         applyMiddleware(thunk, logger)
     );

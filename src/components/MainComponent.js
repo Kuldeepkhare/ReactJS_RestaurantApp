@@ -9,6 +9,7 @@ import ContactComponent from "./ContactComponent";
 import AboutComponent from './AboutComponent';
 import {connect} from "react-redux";
 import {addComment, fetchDishes} from "../redux/actionCreators";
+import {actions} from "react-redux-form";
 
 /**
  * This method maps the incoming state items to props of this component
@@ -28,6 +29,9 @@ const mapDispatchToProps = dispatch => ({
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
     fetchDishes: () => {
         dispatch(fetchDishes())
+    },
+    resetFeedbackForm: () => {
+        dispatch(actions.reset('feedback'))
     }
 });
 
@@ -81,7 +85,8 @@ class MainComponent extends Component {
                     <Route path='/home' component={HomePage}/>
                     <Route exact path='/menu' component={() => <MenuComponent dishes={this.props.dishes}/>}/>
                     <Route path='/menu/:dishId' component={DishWithId}/>
-                    <Route exact path='/contactus' component={ContactComponent}/>
+                    <Route exact path='/contactus'
+                           component={() => <ContactComponent resetFeedbackForm={this.props.resetFeedbackForm} />}/>
                     <Route exact path='/aboutus' component={() => <AboutComponent leaders={this.props.leaders}/>}/>
                     <Redirect to='/home'/>
                 </Switch>
