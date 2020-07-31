@@ -16,6 +16,7 @@ import {Link} from 'react-router-dom';
 import {Control, Errors, LocalForm} from "react-redux-form";
 import {LoadingComponent} from './LoadingComponent';
 import {baseURL} from "../shared/baseURL";
+import {FadeTransform, Fade, Stagger} from 'react-animation-components';
 
 /**
  * All the required form validation method definition
@@ -131,24 +132,21 @@ function RenderComments({comments, postComment, dishId}) {
         return (
             <div className="col-12 col-md-5 m-1">
                 <h4>Comments</h4>
-                <ul className="list-unstyled">
-                    {comments.map((commentDetails) => {
-                        if (commentDetails != null)
-                            return (
-                                <div key={commentDetails.id}>
-                                    <li>
-                                        <p>{commentDetails.comment}</p>
-                                        {/*Displaying author name with date in format*/}
-                                        <p>-- {commentDetails.author} , {moment(commentDetails.date).format('MMM DD, YYYY')}</p>
-                                    </li>
-                                </div>
-                            );
-                        else
-                            return (
-                                <div></div>
-                            );
-                    })};
-                </ul>
+
+                    <ul className="list-unstyled">
+                        <Stagger in>
+                            {comments.map((commentDetails) => {
+                                return (
+                                    <Fade in key={commentDetails.id}>
+                                        <li key={commentDetails.id}>
+                                            <p>{commentDetails.comment}</p>
+                                            <p>-- {commentDetails.author} , {moment(commentDetails.date).format('MMM DD, YYYY')}</p>
+                                        </li>
+                                    </Fade>
+                                );
+                            })}
+                        </Stagger>
+                    </ul>
                 <CommentFormComponent dishId={dishId} postComment={postComment}/>
             </div>
         );
@@ -167,13 +165,19 @@ function RenderComments({comments, postComment, dishId}) {
  */
 function RenderDish({dish}) {
     return (
-        <Card>
-            <CardImg top src={baseURL + dish.image} alt={dish.name}/>
-            <CardBody>
-                <CardTitle>{dish.name}</CardTitle>
-                <CardText>{dish.description}</CardText>
-            </CardBody>
-        </Card>
+        <FadeTransform
+            in
+            transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}>
+            <Card>
+                <CardImg top src={baseURL + dish.image} alt={dish.name}/>
+                <CardBody>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>
+        </FadeTransform>
     )
 }
 
@@ -214,11 +218,11 @@ function DishDetail(props) {
                 </div>
                 <div className="row">
                     <div className="col-12 col-md-5 m-1">
-                        <RenderDish dish={dish}></RenderDish>
+                        <RenderDish dish={dish}/>
                     </div>
                     <RenderComments comments={props.comments}
                                     postComment={props.postComment}
-                                    dishId={props.dish.id}></RenderComments>
+                                    dishId={props.dish.id}/>
                 </div>
             </div>
         );

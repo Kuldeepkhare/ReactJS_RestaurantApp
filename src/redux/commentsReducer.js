@@ -1,5 +1,4 @@
 import * as ActionTypes from './actionTypes';
-import * as moment from "moment";
 
 export const CommentsReducer = (state = {
     errorMessage: null,

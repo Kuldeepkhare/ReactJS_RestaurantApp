@@ -1,4 +1,3 @@
-import {PROMOTIONS} from "../shared/promotions";
 import * as ActionTypes from './actionTypes';
 
 export const PromotionsReducer = (state = {
