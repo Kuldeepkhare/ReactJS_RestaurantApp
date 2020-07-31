@@ -12,8 +12,6 @@ export const CommentsReducer = (state = {
             return {...state, errorMessage: action.payload};
         case ActionTypes.ADD_COMMENT:
             let comment = action.payload;
-            comment.id = state.length;
-            comment.date = moment().format('MMM DD, YYYY');
             return { ...state, comments: state.comments.concat(comment)};
         default:
             return state;
