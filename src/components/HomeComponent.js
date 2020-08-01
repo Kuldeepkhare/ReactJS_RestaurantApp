@@ -7,12 +7,22 @@ import {LoadingComponent} from "./LoadingComponent";
 import {baseURL} from "../shared/baseURL";
 import {FadeTransform} from 'react-animation-components';
 
+/**
+ * This method renders tge card with some information
+ * @param item
+ * @param isLoading
+ * @param errorMessage
+ * @returns {*}
+ * @constructor
+ */
 function RenderCard({item, isLoading, errorMessage}) {
+    // display loader incase content is still loading
     if (isLoading) {
         return (
             <LoadingComponent/>
         );
     } else if (errorMessage) {
+        // display error message incase content failed to load
         return (
             <h4>{errorMessage}</h4>
         );
@@ -31,6 +41,12 @@ function RenderCard({item, isLoading, errorMessage}) {
         );
 }
 
+/**
+ * This component is the Home Component which is home page
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
 function HomeComponent(props) {
     return (
         <div className="container">
@@ -46,7 +62,9 @@ function HomeComponent(props) {
                                 errorMessage={props.promoErrMess}/>
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.leader}/>
+                    <RenderCard item={props.leader}
+                                isLoading={props.leaderLoading}
+                                errorMessage={props.leaderError}/>
                 </div>
             </div>
         </div>

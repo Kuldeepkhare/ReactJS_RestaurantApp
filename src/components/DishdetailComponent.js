@@ -199,7 +199,7 @@ function DishDetail(props) {
         return (
             <div className="container">
                 <div className="row">
-                    <h4>{props.errMess}</h4>
+                    <h4>{props.errorMessage}</h4>
                 </div>
             </div>
         );

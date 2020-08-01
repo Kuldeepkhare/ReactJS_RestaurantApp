@@ -1,6 +1,9 @@
 import React from 'react';
 import {Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {baseURL} from "../shared/baseURL";
+import {LoadingComponent} from "./LoadingComponent";
+import {Fade, Stagger} from "react-animation-components";
 
 /**
  * This functional component renders the leader details using Media
@@ -8,21 +11,50 @@ import {Link} from 'react-router-dom';
  * @returns {*}:  renders the leader information using the reactstrap <Media> component
  * @constructor
  */
-function RenderLeader({leader}) {
-    return (
-        <div id={leader.id} className="col-12 mt-5">
-            <Media tag="li">
-                <Media left middle>
-                    <Media object src={leader.image} alt={leader.name}/>
-                </Media>
-                <Media body className="ml-5">
-                    <Media heading>{leader.name}</Media>
-                    <Media className="mb-3">{leader.designation}</Media>
-                    <p>{leader.description}</p>
-                </Media>
-            </Media>
-        </div>
-    );
+function RenderLeader({leaders}) {
+    if (leaders.isLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <LoadingComponent/>
+                </div>
+            </div>
+        );
+    } else if (leaders.errorMessage) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <h4>{leaders.errorMessage}</h4>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    if (leaders.leaders.length) {
+        return (
+            <Stagger in>
+                {leaders.leaders.map((leader) => {
+                    return (
+                        <Fade in key={leader.id}>
+                            <div id={leader.id} className="col-12 mt-5">
+                                <Media tag="li">
+                                    <Media left middle>
+                                        <Media object src={baseURL + leader.image} alt={leader.name}/>
+                                    </Media>
+                                    <Media body className="ml-5">
+                                        <Media heading>{leader.name}</Media>
+                                        <Media className="mb-3">{leader.designation}</Media>
+                                        <p>{leader.description}</p>
+                                    </Media>
+                                </Media>
+                            </div>
+                        </Fade>
+                    );
+                })}
+            </Stagger>
+        )
+    }
 }
 
 /**
@@ -32,13 +64,6 @@ function RenderLeader({leader}) {
  * @constructor
  */
 function AboutComponent(props) {
-
-    const leaders = props.leaders.map((leader) => {
-        return (
-        <RenderLeader key={leader.id} leader={leader}/>
-        );
-    });
-
     return (
         <div className="container">
             <div className="row">
@@ -101,7 +126,7 @@ function AboutComponent(props) {
                 </div>
                 <div className="col-12">
                     <Media list>
-                        {leaders}
+                        <RenderLeader leaders={props.leaders}/>
                     </Media>
                 </div>
             </div>

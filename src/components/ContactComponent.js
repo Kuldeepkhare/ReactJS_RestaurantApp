@@ -9,6 +9,9 @@ const minLength = (len) => (val) => val && (val.length >= len);
 const isNumber = (val) => !isNaN(Number(val));
 const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
+/**
+ * This component is responsible for displaying contact details and feedback form
+ */
 class ContactComponent extends Component {
 
     constructor(props) {
@@ -22,8 +25,8 @@ class ContactComponent extends Component {
      */
     handleSubmit(values) {
         console.log('Data after submit' + JSON.stringify(values));
-        alert('Data after submit' + JSON.stringify(values));
         this.props.resetFeedbackForm();
+        this.props.postFeedback(values);
     }
 
     /**
@@ -210,7 +213,6 @@ class ContactComponent extends Component {
             </div>
         );
     }
-
 }
 
 export default ContactComponent;
